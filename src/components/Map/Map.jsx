@@ -5,19 +5,22 @@ import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import Rating from '@material-ui/lab/Rating';
 
 import useStyles from './styles'
-const Map = ({ setCoordinates, setBounds, coordinates, places, setChildClicked }) => {
+
+import mapStyles from './mapStyles'
+
+const Map = ({ setCoordinates, setBounds, coordinates, places, setChildClicked }) => { //, weatherData
     const classes = useStyles();
     const isDesktop = useMediaQuery('(min-width:600px)');
 
     return (
         <div className={classes.mapContainer}>
             <GoogleMapReact
-                bootstrapURLKeys={{ key: 'AIzaSyD75rFZcgUeB452gGXB3XhZF8b4qbqyPTU' }}
+                bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
                 defaultCenter={coordinates}
                 center={coordinates}
                 defaultZoom={14}
                 margin={[50, 50, 50, 50]}
-                options={''}
+                options={{ disableDefaultUI: true, zoomControl: true, styles: mapStyles }}
                 onChange={(e) => {
                     setCoordinates({ lat: e.center.lat, lng: e.center.lng });
                     setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
@@ -50,6 +53,14 @@ const Map = ({ setCoordinates, setBounds, coordinates, places, setChildClicked }
                         }
                     </div>
                 ))}
+                {/* {weatherData?.list?.map((data, i) => (
+                    <div key={i} lat={data.lat} lng={data.lon}>
+                        <img height={100} src={`https://www.weatherbit.io/static/img/icons/r01d.png`} />
+                        {console.log(`https://www.weatherbit.io/static/img/icons/${data.weather.icon}.png`)}
+                    </div>
+                    
+                ))} */}
+
             </GoogleMapReact>
         </div>
     )
